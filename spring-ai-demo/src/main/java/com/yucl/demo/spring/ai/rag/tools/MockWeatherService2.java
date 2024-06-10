@@ -1,4 +1,4 @@
-package com.yucl.demo.spring.ai;
+package com.yucl.demo.spring.ai.rag.tools;
 
 import java.util.function.Function;
 
@@ -19,7 +19,7 @@ public class MockWeatherService2 implements Function<MockWeatherService2.Request
      * Weather Function request.
      */
     @JsonInclude(Include.NON_NULL)
-    @JsonClassDescription("Weather API request")
+    @JsonClassDescription("Get the current weather in a given location")
     public record Request(
             @JsonProperty(required = true, value = "location") @JsonPropertyDescription("The city and state e.g. San Francisco, CA") String location,
             @JsonProperty(required = true, value = "unit") @JsonPropertyDescription("Temperature unit") Unit unit) {
@@ -70,7 +70,7 @@ public class MockWeatherService2 implements Function<MockWeatherService2.Request
         } else {
             temperature = 40;
         }
-
+        System.out.println("call MockWeatherService2");
         return new Response(temperature, 15, 20, 2, 53, 45, Unit.C);
     }
 

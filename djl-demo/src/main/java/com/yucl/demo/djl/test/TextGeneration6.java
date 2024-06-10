@@ -53,7 +53,7 @@ public final class TextGeneration6 {
                 // .optModelPath(Paths.get("D:/llm/gpt2_pt"))
                 .optModelName("Phi")
                 .optModelPath(Path.of(
-                        "C:\\Users\\yuchu\\.cache\\huggingface\\hub\\models--microsoft--Phi-3-mini-128k-instruct\\snapshots\\5be6479b4bc06a081e8f4c6ece294241ccd32dec"))
+                        "C:\\Users\\yuchu\\.aitk\\models\\microsoft\\mistral-7b-instruct-v0.2-ONNX\\onnx\\cpu_and_mobile\\mistral-7b-instruct-v0.2-cpu-int4-rtn-block-32-acc-level-4\\mistral-7b-instruct-v0.2-cpu-int4-rtn-block-32-acc-level-4.onnx"))
                 .optEngine("PyTorch")
                 // .optTranslator(new MyTranslator())
                 // .optTranslatorFactory(new OrtGptTranslatorFactory())
@@ -66,7 +66,7 @@ public final class TextGeneration6 {
                 NDManager manager = model.getNDManager().newSubManager();
                 HuggingFaceTokenizer tokenizer = HuggingFaceTokenizer
                         .newInstance(Paths.get(
-                                "C:\\\\Users\\\\yuchu\\\\.cache\\\\huggingface\\\\hub\\\\models--microsoft--Phi-3-mini-128k-instruct\\\\snapshots\\\\5be6479b4bc06a081e8f4c6ece294241ccd32dec\\tokenizer.json"))) {
+                                "C:\\Users\\yuchu\\.aitk\\models\\microsoft\\mistral-7b-instruct-v0.2-ONNX\\onnx\\cpu_and_mobile\\mistral-7b-instruct-v0.2-cpu-int4-rtn-block-32-acc-level-4\\tokenizer.json"))) {
 
             MyTextGenerator generator = new MyTextGenerator(predictor, "greedy", config);
 

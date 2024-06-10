@@ -36,38 +36,36 @@ public class MyTranslator implements NoBatchifyTranslator<NDList, CausalLMOutput
     @Override
     public NDList processInput(TranslatorContext ctx, NDList input) throws Exception {
         // input = [inputIds, posIds, attnMask]
-        // NDManager manager = ctx.getNDManager();
-        // NDArray inputIds = input.get(0);
-        // inputIds.setName("input_ids");
+        NDManager manager = ctx.getNDManager();
+        NDArray inputIds = input.get(0);
+        inputIds.setName("input_ids");
 
-        // NDArray attentionMask = input.get(2);
-        // attentionMask.setName("attention_mask");
+        NDArray attentionMask = input.get(2);
+        attentionMask.setName("attention_mask");
 
-        // NDList inputNew;
-        // if (input.size() == 3) {
-        // // pastKeyValue == null
-        // NDArray useCacheBranch = manager.create(new boolean[] { false }, new
-        // Shape(1));
-        // useCacheBranch.setName("use_cache_branch");
-        // inputNew = new NDList(inputIds, attentionMask, useCacheBranch);
-        // initialDummyPastKeyValues(inputIds, manager, inputNew);
-        // } else {
-        // NDArray useCacheBranch = manager.create(new boolean[] { true }, new
-        // Shape(1));
-        // useCacheBranch.setName("use_cache_branch");
-        // inputNew = new NDList(inputIds, attentionMask, useCacheBranch);
-        // inputNew.addAll(input.subNDList(3));
-        // }
+        NDList inputNew;
+        if (input.size() == 3) {
+            // pastKeyValue == null
+            NDArray useCacheBranch = manager.create(new boolean[] { false }, new Shape(1));
+            useCacheBranch.setName("position_ids");
+            inputNew = new NDList(inputIds, attentionMask, useCacheBranch);
+            initialDummyPastKeyValues(inputIds, manager, inputNew);
+        } else {
+            NDArray useCacheBranch = manager.create(new boolean[] { true }, new Shape(1));
+            useCacheBranch.setName("use_cache_branch");
+            inputNew = new NDList(inputIds, attentionMask, useCacheBranch);
+            inputNew.addAll(input.subNDList(3));
+        }
 
-        // int offset = 3;
+        int offset = 3;
         // for (int i = offset; i < numLayers * 2 + offset; i += 2) {
-        // int order = (i - offset) / 2;
-        // inputNew.get(i).setName(String.format("past_key_values.%s.key", order));
-        // inputNew.get(i + 1).setName(String.format("past_key_values.%s.value",
-        // order));
-        // }
+        for (int i = offset; i < 22; i += 2) {
+            int order = (i - offset) / 2;
+            inputNew.get(i).setName(String.format("past_key_values.%s.key", order));
+            inputNew.get(i + 1).setName(String.format("past_key_values.%s.value", order));
+        }
 
-        return input;
+        return inputNew;
     }
 
     /** {@inheritDoc} */
@@ -78,8 +76,8 @@ public class MyTranslator implements NoBatchifyTranslator<NDList, CausalLMOutput
 
     private void initialDummyPastKeyValues(NDArray inputIds, NDManager manager, NDList list) {
         long numBatch = inputIds.getShape().get(0);
-        for (int i = 0; i < numLayers * 2; ++i) {
-            NDArray array = manager.zeros(new Shape(numBatch, numAttentionHeads, 1, kvDim));
+        for (int i = 0; i < 23; ++i) {
+            NDArray array = manager.zeros(new Shape(2, 2, 32, 64));
             list.add(array);
         }
     }

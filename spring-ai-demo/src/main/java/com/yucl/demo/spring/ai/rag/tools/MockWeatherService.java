@@ -1,4 +1,4 @@
-package com.yucl.demo.spring.ai;
+package com.yucl.demo.spring.ai.rag.tools;
 
 import java.util.function.Function;
 
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonClassDescription;
 
 public class MockWeatherService
         implements
-        Function<com.yucl.demo.spring.ai.MockWeatherService.Request, com.yucl.demo.spring.ai.MockWeatherService.Response> {
+        Function<com.yucl.demo.spring.ai.rag.tools.MockWeatherService.Request, com.yucl.demo.spring.ai.rag.tools.MockWeatherService.Response> {
 
     public enum Unit {
         C, F

@@ -1,4 +1,4 @@
-package com.yucl.demo.spring.ai;
+package com.yucl.demo.spring.ai.rag.test;
 
 import java.time.Duration;
 import java.util.List;

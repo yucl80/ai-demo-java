@@ -28,23 +28,15 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public final class TextGeneration1 {
+public final class TextGeneration7 {
 
     private static final Logger logger = LoggerFactory.getLogger(TextGeneration1.class);
-
-    private TextGeneration1() {
-    }
 
     public static void main(String[] args)
             throws IOException,
             TranslateException, ModelException {
         String ret1 = generateTextWithPyTorchGreedy();
         logger.info("{}", ret1);
-        // String[] ret2 = generateTextWithPyTorchContrastive();
-        // logger.info("{}", ret2[0]);
-        // String[] ret3 = generateTextWithPyTorchBeam();
-        // logger.info("{}", ret3[0]);
-        // String[] ret4 = generateTextWithOnnxRuntimeBeam();
     }
 
     public static String generateTextWithPyTorchGreedy()
@@ -55,20 +47,13 @@ public final class TextGeneration1 {
         SearchConfig config = new SearchConfig();
         config.setMaxSeqLength(100);
 
-        // You can use src/main/python/trace_gpt2.py to trace gpt2 model
-        // String url =
-        // "https://djl-misc.s3.amazonaws.com/test/models/gpt2/gpt2_pt.zip";
-        String url = "file:///D:/llm/gpt2_pt.zip";
-
         Criteria<NDList, CausalLMOutput> criteria = Criteria.builder()
                 .setTypes(NDList.class, CausalLMOutput.class)
-                // .optModelUrls(url)
-                // .optModelPath(Paths.get("D:/llm/gpt2_pt"))
                 .optModelName("llama")
-                .optModelPath(Path.of("D:\\llm\\bge-m3-optimize\\model_optimized.onnx"))
+                .optModelPath(Path.of("D:\\llm\\qwen2-0.5B-onnx\\model.onnx"))
                 .optEngine("OnnxRuntime")
-                // .optTranslator(new MyTranslator())
-                .optTranslatorFactory(new OrtGptTranslatorFactory())
+                .optTranslator(new MyTranslator())
+                // .optTranslatorFactory(new OrtGptTranslatorFactory())
                 // .optTranslatorFactory(new DeferredTranslatorFactory())
                 .build();
         String input = "China is";
@@ -77,7 +62,7 @@ public final class TextGeneration1 {
                 Predictor<NDList, CausalLMOutput> predictor = model.newPredictor();
                 NDManager manager = model.getNDManager().newSubManager();
                 HuggingFaceTokenizer tokenizer = HuggingFaceTokenizer
-                        .newInstance(Paths.get("D:\\llm\\bge-m3-optimize\\tokenizer.json"))) {
+                        .newInstance(Paths.get("D:\\llm\\qwen2-0.5B-onnx\\tokenizer.json"))) {
 
             MyTextGenerator generator = new MyTextGenerator(predictor, "greedy", config);
 

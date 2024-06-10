@@ -52,7 +52,8 @@ public final class TextGeneration4 {
                 .setTypes(NDList.class, CausalLMOutput.class)
                 .optEngine("OnnxRuntime")
                 .optModelName("llama")
-                .optModelPath(Path.of("D:\\llm\\llama_quantize\\model_quantized.onnx"))
+                .optModelPath(Path
+                        .of("C:\\Users\\yuchu\\.aitk\\models\\microsoft\\mistral-7b-instruct-v0.2-ONNX\\onnx\\cpu_and_mobile\\mistral-7b-instruct-v0.2-cpu-int4-rtn-block-32-acc-level-4\\mistral-7b-instruct-v0.2-cpu-int4-rtn-block-32-acc-level-4.onnx"))
                 // .optTranslatorFactory(new OrtGptTranslatorFactory())
                 .optTranslator(new MyTranslator())
                 .build();
@@ -62,7 +63,8 @@ public final class TextGeneration4 {
                 Predictor<NDList, CausalLMOutput> predictor = model.newPredictor();
                 NDManager manager = model.getNDManager().newSubManager();
                 HuggingFaceTokenizer tokenizer = HuggingFaceTokenizer
-                        .newInstance(Paths.get("D:\\llm\\llama_quantize\\tokenizer.json"))) {
+                        .newInstance(Paths.get(
+                                "C:\\Users\\yuchu\\.aitk\\models\\microsoft\\mistral-7b-instruct-v0.2-ONNX\\onnx\\cpu_and_mobile\\mistral-7b-instruct-v0.2-cpu-int4-rtn-block-32-acc-level-4\\tokenizer.json"))) {
 
             TextGenerator generator = new TextGenerator(predictor, "contrastive", config);
             NDArray inputIdArray = encodeWithPadding(manager, tokenizer, inputs, padTokenId);

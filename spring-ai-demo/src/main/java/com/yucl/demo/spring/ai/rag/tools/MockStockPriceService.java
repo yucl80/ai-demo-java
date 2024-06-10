@@ -1,4 +1,4 @@
-package com.yucl.demo.spring.ai;
+package com.yucl.demo.spring.ai.rag.tools;
 
 import java.util.function.Function;
 
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class MockStockPriceService implements
-        Function<com.yucl.demo.spring.ai.MockStockPriceService.StockName, com.yucl.demo.spring.ai.MockStockPriceService.StockPrice> {
+        Function<com.yucl.demo.spring.ai.rag.tools.MockStockPriceService.StockName, com.yucl.demo.spring.ai.rag.tools.MockStockPriceService.StockPrice> {
 
     // @JsonClassDescription("the stock name")
     public record StockName(@JsonPropertyDescription("the stock name") String stockName) {
