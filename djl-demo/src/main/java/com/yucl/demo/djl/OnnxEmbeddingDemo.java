@@ -14,21 +14,15 @@ import ai.onnxruntime.OrtSession;
 public class OnnxEmbeddingDemo {
 
     public static void main(String[] args) throws Exception {
-        // String TOKENIZER_URI = "D:\\llm\\bge-m3-onnx3\\tokenizer.json";
-        // String MODEL_URI = "D:\\llm\\bge-m3-onnx3\\model.onnx";
-        String TOKENIZER_URI = "D:\\llm\\bge-m3-optimize\\tokenizer.json";
-        String MODEL_URI = "D:\\llm\\bge-m3-optimize\\model_optimized.onnx";
+        String TOKENIZER_URI = "D:\\llm\\onnx\\tokenizer.json";
+        String MODEL_URI = "D:\\llm\\onnx\\model.onnx";
         HuggingFaceTokenizer tokenizer = HuggingFaceTokenizer.newInstance(Paths.get(TOKENIZER_URI), Map.of());
         try (OrtEnvironment environment = OrtEnvironment.getEnvironment();
                 OrtSession session = environment.createSession(MODEL_URI);) {
-            String[] sentences = new String[] { "I love you", "我爱你" };
-
-            for (int i = 0; i < 10; i++) {
-                float[][] embeddings = emb(environment, session, tokenizer, sentences);
-            }
+            String[] sentences = new String[] { "I like you", "我喜欢你" };
             long l = System.currentTimeMillis();
             float[][] embeddings = emb(environment, session, tokenizer, sentences);
-            System.out.println(System.currentTimeMillis() - l);
+            System.out.println("used time:" + (System.currentTimeMillis() - l));
             double similaryity = cosineSimilarity(embeddings[0], embeddings[1]);
             System.out.println(similaryity);
         }
@@ -51,9 +45,7 @@ public class OnnxEmbeddingDemo {
             inputs.put("input_ids", inputIds);
             inputs.put("attention_mask", attentionMask);
             try (OrtSession.Result results = session.run(inputs)) {
-
                 embeddings = (float[][]) results.get("sentence_embedding").get().getValue();
-
             }
             inputs.clear();
 

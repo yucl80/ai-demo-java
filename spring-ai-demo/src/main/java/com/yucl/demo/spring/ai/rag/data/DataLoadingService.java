@@ -18,7 +18,7 @@ public class DataLoadingService {
 
 	private static final Logger logger = LoggerFactory.getLogger(DataLoadingService.class);
 
-	@Value("classpath:/data/medicaid-wa-faqs.pdf")
+	@Value("classpath:/data/b.pdf")
 	private Resource pdfResource;
 
 	private final VectorStore vectorStore;

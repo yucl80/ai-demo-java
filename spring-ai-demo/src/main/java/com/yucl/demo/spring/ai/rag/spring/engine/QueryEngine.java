@@ -11,6 +11,7 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.document.DocumentRetriever;
+import org.springframework.ai.openai.OpenAiChatOptions;
 
 import java.util.List;
 import java.util.Map;
@@ -33,16 +34,25 @@ public class QueryEngine implements Engine {
 	// system
 	// context.
 	// This is the default user message is there isn't a system prompt provided.
+	// private static final String DEFAULT_USER_PROMPT_TEXT = """
+	// "Context information is below.\\n"
+	// "---------------------\\n"
+	// "{context}\\n"
+	// "---------------------\\n"
+	// "Given the context information and not prior knowledge, "
+	// "answer the question. If the answer is not in the context, inform "
+	// "the user that you can't answer the question.\\n"
+	// "Question: {question}\\n"
+	// "Answer: "
+	// """;
+
 	private static final String DEFAULT_USER_PROMPT_TEXT = """
-			   "Context information is below.\\n"
-			   "---------------------\\n"
-			   "{context}\\n"
-			   "---------------------\\n"
-			   "Given the context information and not prior knowledge, "
-			   "answer the question. If the answer is not in the context, inform "
-			   "the user that you can't answer the question.\\n"
-			   "Question: {question}\\n"
-			   "Answer: "
+			"请根据下面的内容回答问题：\\n"
+			"---------------------\\n"
+			"{context}\\n"
+			"---------------------\\n"
+			"如果答案不在上面的内容中，则提示：‘我不了解相关知识’。\\n "
+			"问题: {question}\\n"
 			""";
 
 	public QueryEngine(ChatClient chatClient, DocumentRetriever documentRetriever) {
@@ -73,11 +83,12 @@ public class QueryEngine implements Engine {
 	protected Prompt createPrompt(Map<String, Object> contextMap) {
 		Message userMessage = createUserMessage(contextMap);
 		Prompt prompt;
+		OpenAiChatOptions chatOptions = OpenAiChatOptions.builder().withMaxTokens(500).build();
 		if (this.systemPromptTemplate != null) {
 			Message systemMessage = createSystemMessage(contextMap);
-			prompt = new Prompt(List.of(systemMessage, userMessage));
+			prompt = new Prompt(List.of(systemMessage, userMessage), chatOptions);
 		} else {
-			prompt = new Prompt(userMessage);
+			prompt = new Prompt(userMessage, chatOptions);
 		}
 		return prompt;
 	}
