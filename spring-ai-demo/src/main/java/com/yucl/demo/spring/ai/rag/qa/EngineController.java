@@ -11,6 +11,9 @@ import com.yucl.demo.spring.ai.rag.spring.engine.QueryEngine;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/qa/engine")
@@ -28,7 +31,15 @@ public class EngineController {
 		EngineResponse engineResponse = this.queryEngine.call(question);
 		Map<String, Object> response = new HashMap<>();
 		response.put("question", question);
-		response.put("answer", engineResponse.getChatResponse().getResult().getOutput().getContent());
+		String content = engineResponse.getChatResponse().getResult().getOutput().getContent();
+		if (content != null) {
+			content = content.replaceAll("\\\n", "");
+		}
+		Set<String> ref = engineResponse.getDocuments().stream()
+				.map(doc -> doc.getMetadata().toString())
+				.collect(Collectors.toSet());
+		response.put("answer", content);
+		response.put("ref", ref);
 		return response;
 	}
 

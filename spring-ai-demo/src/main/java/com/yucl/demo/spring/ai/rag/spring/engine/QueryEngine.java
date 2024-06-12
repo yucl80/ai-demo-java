@@ -51,7 +51,7 @@ public class QueryEngine implements Engine {
 			"---------------------\\n"
 			"{context}\\n"
 			"---------------------\\n"
-			"如果答案不在上面的内容中，则提示：‘我不了解相关知识’。\\n "
+			"如果答案不在上面的内容中，则提示：‘我不了解相关信息’。\\n "
 			"问题: {question}\\n"
 			""";
 
@@ -83,7 +83,7 @@ public class QueryEngine implements Engine {
 	protected Prompt createPrompt(Map<String, Object> contextMap) {
 		Message userMessage = createUserMessage(contextMap);
 		Prompt prompt;
-		OpenAiChatOptions chatOptions = OpenAiChatOptions.builder().withMaxTokens(500).build();
+		OpenAiChatOptions chatOptions = OpenAiChatOptions.builder().withMaxTokens(200).build();
 		if (this.systemPromptTemplate != null) {
 			Message systemMessage = createSystemMessage(contextMap);
 			prompt = new Prompt(List.of(systemMessage, userMessage), chatOptions);

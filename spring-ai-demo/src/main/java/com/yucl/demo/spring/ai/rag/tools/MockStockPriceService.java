@@ -16,7 +16,7 @@ public class MockStockPriceService implements
 
     public StockPrice apply(StockName stockName) {
         System.out.println("call MockStockPriceService");
-        return new StockPrice(40d);
+        return new StockPrice(40d + (int) (Math.random() * 5));
     }
 
 }

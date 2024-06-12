@@ -29,7 +29,7 @@ public class OnnxTextGenerateDemo {
         sessionOptions.setMemoryPatternOptimization(true);
         try (OrtEnvironment env = OrtEnvironment.getEnvironment();
                 OrtSession session = env.createSession(MODEL_URI, sessionOptions);) {
-            String sentences = "How to learn ai program ?";
+            String sentences = "How to learn ai program ? ";
             HuggingFaceTokenizer tokenizer = HuggingFaceTokenizer.newInstance(Paths.get(TOKENIZER_URI), Map.of());
 
             Encoding encodings = tokenizer.encode(sentences);
@@ -38,7 +38,7 @@ public class OnnxTextGenerateDemo {
             for (long id : input_ids) {
                 generatedIds.add(id);
             }
-            int totalLength = 200;
+            int totalLength = 100;
             while (generatedIds.size() < totalLength) {
                 long[] currentInputIds = new long[generatedIds.size()];
                 long[] currentPositionIds = new long[generatedIds.size()];
@@ -65,6 +65,7 @@ public class OnnxTextGenerateDemo {
                         float[][][] logits = (float[][][]) lastHiddenState.getValue();
                         long nextTokenId = argmax(logits[0][logits[0].length - 1]);
                         generatedIds.add(nextTokenId);
+                        System.out.print(tokenizer.decode(new long[] { nextTokenId }) + " ");
                     }
                     inputs.clear();
                 }

@@ -19,12 +19,16 @@ public class OnnxEmbeddingDemo {
         HuggingFaceTokenizer tokenizer = HuggingFaceTokenizer.newInstance(Paths.get(TOKENIZER_URI), Map.of());
         try (OrtEnvironment environment = OrtEnvironment.getEnvironment();
                 OrtSession session = environment.createSession(MODEL_URI);) {
-            String[] sentences = new String[] { "I like you", "我喜欢你" };
+            String[] sentences = new String[] { "I like you", "我喜欢你", "我讨厌你" };
             long l = System.currentTimeMillis();
             float[][] embeddings = emb(environment, session, tokenizer, sentences);
             System.out.println("used time:" + (System.currentTimeMillis() - l));
             double similaryity = cosineSimilarity(embeddings[0], embeddings[1]);
             System.out.println(similaryity);
+            double similaryity2 = cosineSimilarity(embeddings[0], embeddings[2]);
+            System.out.println(similaryity2);
+            double similaryity3 = cosineSimilarity(embeddings[1], embeddings[2]);
+            System.out.println(similaryity3);
         }
 
     }

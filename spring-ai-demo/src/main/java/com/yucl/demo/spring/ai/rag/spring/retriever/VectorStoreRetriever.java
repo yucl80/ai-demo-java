@@ -32,7 +32,7 @@ public class VectorStoreRetriever implements DocumentRetriever {
 	@Override
 	public List<Document> retrieve(String message) {
 		logger.info("Retrieving relevant documents");
-		SearchRequest updatedSearchRequest = this.searchRequest.withQuery(message);
+		SearchRequest updatedSearchRequest = this.searchRequest.withQuery(message).withTopK(3);
 		List<Document> similarDocuments = vectorStore.similaritySearch(updatedSearchRequest);
 		logger.info("Found {} relevant documents.", similarDocuments.size());
 		return similarDocuments;

@@ -30,6 +30,17 @@ public class DataController {
 		}
 	}
 
+	@GetMapping("/loadfile")
+	public ResponseEntity<String> loadFile(@RequestParam(value = "file") String file) {
+		try {
+			this.dataLoadingService.load(file);
+			return ResponseEntity.ok("Data loaded successfully!");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("An error occurred while loading data: " + e.getMessage());
+		}
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<String> handleException(Exception e) {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
