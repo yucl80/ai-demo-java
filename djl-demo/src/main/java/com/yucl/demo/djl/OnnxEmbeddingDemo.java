@@ -14,15 +14,19 @@ import ai.onnxruntime.OrtSession;
 public class OnnxEmbeddingDemo {
 
     public static void main(String[] args) throws Exception {
-        String TOKENIZER_URI = "D:\\llm\\onnx\\tokenizer.json";
-        String MODEL_URI = "D:\\llm\\onnx\\model.onnx";
+        String TOKENIZER_URI = "D:\\llm\\bge-m3-onnx\\tokenizer.json";
+        String MODEL_URI = "D:\\llm\\bge-m3-onnx\\model.onnx";
         HuggingFaceTokenizer tokenizer = HuggingFaceTokenizer.newInstance(Paths.get(TOKENIZER_URI), Map.of());
         try (OrtEnvironment environment = OrtEnvironment.getEnvironment();
                 OrtSession session = environment.createSession(MODEL_URI);) {
             String[] sentences = new String[] { "I like you", "我喜欢你", "我讨厌你" };
+            emb(environment, session, tokenizer, sentences);
             long l = System.currentTimeMillis();
-            float[][] embeddings = emb(environment, session, tokenizer, sentences);
+            for (int i = 0; i < 100; i++) {
+                float[][] embeddings = emb(environment, session, tokenizer, sentences);
+            }
             System.out.println("used time:" + (System.currentTimeMillis() - l));
+            float[][] embeddings = emb(environment, session, tokenizer, sentences);
             double similaryity = cosineSimilarity(embeddings[0], embeddings[1]);
             System.out.println(similaryity);
             double similaryity2 = cosineSimilarity(embeddings[0], embeddings[2]);
